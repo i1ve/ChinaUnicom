@@ -1,0 +1,31 @@
+﻿ChinaUnicom
+/
+Android
+Search
+Try Notion
+Android
+Termux
+Termux
+安装
+clone 安装依赖 示例如下:
+Shell
+Copy
+pkg update
+pkg install nodejs
+# 使用 wget 下载这几个文件 或 自行下载
+wget https://github.com/ChinaTelecomOperators/ChinaUnicom/releases/download/Prerelease-Alpha/package.json
+wget https://github.com/ChinaTelecomOperators/ChinaUnicom/releases/download/Prerelease-Alpha/10010.js
+wget https://github.com/ChinaTelecomOperators/ChinaUnicom/releases/download/Prerelease-Alpha/10010_send_sms.js
+wget https://github.com/ChinaTelecomOperators/ChinaUnicom/releases/download/Prerelease-Alpha/10010_sms_sign.js
+
+npm i
+
+​
+termux-notification
+若按照 Termux:API https://wiki.termux.com/wiki/Termux:API 完成了安装配置, 脚本将调用 termux-notification 发送通知
+定时任务/自启动
+自己参考 Termux:Boot https://wiki.termux.com/wiki/Termux:Boot Termux-services https://wiki.termux.com/wiki/Termux-services 里的 cronie 配置
+然后参考 Node.js 通用配置完成登录/配置
+点击查看
+其他通用配置说明
+点击查看

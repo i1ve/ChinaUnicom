@@ -1,0 +1,192 @@
+﻿ChinaUnicom
+/
+Node.js 通用配置说明
+Search
+Try Notion
+Node.js 通用配置说明
+多账号设置方式
+使用短信验证码登录
+不使用短信验证码登录
+所有环境变量
+多账号设置方式
+复制出一个新文件 文件名为 _liubang_10010.js
+即为 另一个账号 liubang 
+它将读取 10010v4-liubang-box.dat 里的配置
+它使用的所有环境变量前缀对应变化
+例如从 ChinaUnicom_10010v4_mobile 对应的变为 liubang_10010v4_mobile
+同理 短信验证码相关的文件也改成 _liubang_10010_sms_sign.js 和 _liubang_10010_send_sms.js
+不同账号使用自定义通知
+此时在执行到 加载sendNotify.js 文件发送通知时, 会优先加载 _liubang_sendNotify.js 来发送通知. 比如你不想使用青龙通用的 sendNotify.js, 你可以自己准备一个  _liubang_sendNotify.js
+使用短信验证码登录
+发送短信验证码
+将尝试从环境变量中读取手机号
+Shell
+Copy
+ChinaUnicom_10010v4_mobile=18600000000 node 10010_send_sms.js
+
+​
+使用短信验证码登录
+将尝试从环境变量中读取手机号和短信验证码
+Shell
+Copy
+ChinaUnicom_10010v4_mobile=18600000000 ChinaUnicom_10010v4_code=1234 node 10010_sms_sign.js
+
+​
+此时已经自动存好了 cookie token_online appId
+如果你不理解, 那么你可以将上述脚本执行日志里的 cookie token_online appId 自己复制出来使用.
+不使用短信验证码登录
+自己配置 Cookie TokenOnline AppId 手机号(mobile) 服务密码(password)  对应的环境变量
+执行一次
+(如果是青龙或者你写到了什么初始化脚本里)删掉 Cookie TokenOnline 的环境变量
+为什么要删掉? 参考下一条​
+所有环境变量
+不要设一个固定的环境变量然后不删掉….因为会优先从环境变量读取 等于每次都是一个固定的值. 它不会被更新…
+还是有人看不懂
+意思就是不要设置一个固定的值 比如 cookie
+因为本脚本不会更新环境变量
+你设了一个固定的 cookie 就会每次都用这个固定的 cookie
+维护在线状态等逻辑得到的新  cookie 也不会在下次被用到
+要 删掉 不要 禁用 因为青龙里的禁用还是会设置环境变量的值, 只不过是设为 空字符串
+青龙里环境变量不能有空格 你可以这么做:
+在这里 写
+Plain Text
+Copy
+$.setdata(`剩 [通用有限.剩余] 今用 [所有通用.今日用量] 今免 [所有免流.今日用量]\n总用 [所有通用.已用] 总免 [所有免流.已用]`, KEY_DESC)
+​
+然后手动执行两次
+第一次它会被写入 dat
+第二次以后 它就会被使用. 可以去删掉它或者不管它.
+以后脚本被定时拉库覆盖了也不影响.
+语法
+Markdown
+Copy
+$.setdata(``, KEY_DESC)
+
+​
+某个 环境变量 对应的 key 自己在下面找​
+JSON
+Copy
+[{
+  "环境变量名": "ChinaUnicom_10010v4_debug",
+  "key": "KEY_DEBUG",
+  "name": "调试模式(一般不开 开了通知爆炸)",
+  "val": false,
+  "type": "boolean",
+  "desc": "默认不开启调试. 开启后将推送自动登录等信息"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_mobile",
+  "key": "KEY_MOBILE",
+  "name": "手机号",
+  "val": "",
+  "type": "text",
+  "desc": "联通客户端登录手机号"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_code",
+  "key": "KEY_CODE",
+  "name": "验证码(执行验证码登录才需要填)",
+  "placeholder": "",
+  "val": "",
+  "type": "text",
+  "desc": "登录短信验证码"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_password",
+  "key": "KEY_PASSWORD",
+  "name": "服务密码",
+  "val": "",
+  "type": "text",
+  "desc": "联通客户端登录的服务密码"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_appId",
+  "key": "KEY_APPID",
+  "name": "appId",
+  "val": "",
+  "type": "text",
+  "desc": "联通客户端 appId"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_cookie",
+  "key": "KEY_COOKIE",
+  "name": "Cookie",
+  "val": "",
+  "type": "text",
+  "desc": "Cookie"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_token_online",
+  "key": "KEY_TOKEN_ONLINE",
+  "name": "TokenOnline",
+  "val": "",
+  "type": "text",
+  "desc": "TokenOnline"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_min_usage",
+  "key": "KEY_MIN_USAGE",
+  "name": "最小用量通知阈值(单位 M) ",
+  "val": 0,
+  "type": "number",
+  "desc": "通知模板内的任一一项用量 >= 该数值时 才会通知. 例 [通用有限.用量] 表示这段时间内 有限的通用包的差额. 如果你要无变化时不通知, 这里可以设为 0.01"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_normal_limited_only",
+  "key": "KEY_NORMAL_LIMITED_ONLY",
+  "name": "仅在 [通用有限.用量] >= 最小用量通知阈值 时, 进行通知",
+  "val": false,
+  "type": "boolean",
+  "desc": "默认关闭. 开启后, 仅在 [通用有限.用量] >= 最小用量通知阈值 时, 才会通知"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_new_pkg_notify_disabled",
+  "key": "KEY_NEW_PKG_NOTIFY_DISABLED",
+  "name": "关闭新增包通知",
+  "val": false,
+  "type": "boolean",
+  "desc": "默认检测到新包时会发送通知"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_title",
+  "key": "KEY_TITLE",
+  "name": "通知标题模板",
+  "val": "",
+  "type": "textarea",
+  "desc": "默认: [套餐], 例: 流邦卡19元套餐. 变量看文档"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_subt",
+  "key": "KEY_SUBT",
+  "name": "通知副标题模板",
+  "val": "",
+  "type": "textarea",
+  "desc": "默认: [时长] 跳 [所有通用.用量] 免 [所有免流.用量], 例: 18分钟 跳 10M 免 10M. 变量看文档"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_desc",
+  "key": "KEY_DESC",
+  "name": "通知正文模板",
+  "val": "",
+  "type": "textarea",
+  "desc": "默认: 通用剩 [通用有限.剩余] 免流剩 [免流有限.剩余], 例: 通用剩 5.03G 免流剩 26.35G. 若定向无限, 推荐使用: 剩 [通用有限.剩余] 今用 [所有通用.今日用量] 今免 [所有免流.今日用量] 变量看文档"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_bark",
+  "key": "KEY_BARK",
+  "name": "使用 Bark 通知",
+  "val": "",
+  "type": "textarea",
+  "desc": "[推送标题]/[推送内容]会被自动替换 形如 https://api.day.app/XXXXXXXXX/[推送标题]/[推送内容]?group=10010&autoCopy=1&isArchive=1&icon=https%3A%2F%2Fraw.githubusercontent.com%2Fanker1209%2Ficon%2Fmain%2Fzglt.png&sound=shake&level=timeSensitive 具体看文档"
+},
+{
+  "环境变量名": "ChinaUnicom_10010v4_config",
+  "key": "KEY_CONFIG",
+  "name": "设置(没需求不用设)",
+  "val": "",
+  "type": "text"
+}]
+
+​
+加个传送门吧 
+通用配置说明 
